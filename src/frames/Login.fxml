@@ -10,8 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane alignment="center" hgap="20.0" prefHeight="300.0" prefWidth="300.0" stylesheets="/sample/Login.css" vgap="15.0"
-          xmlns="http://javafx.com/javafx/8.0.101" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.LogInController">
+<GridPane alignment="center" hgap="20.0" prefHeight="300.0" prefWidth="300.0" stylesheets="/frames/Login.css" vgap="15.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frames.LogInController">
    <columnConstraints>
       <ColumnConstraints />
       <ColumnConstraints />
@@ -28,11 +27,11 @@
          <font>
             <Font name="Times New Roman Bold" size="20.0" />
          </font></Text>
-       <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-       <Label fx:id="userName" text="User Name:" GridPane.rowIndex="1" />
-      <Label fx:id="passWord" text="Password:" GridPane.rowIndex="2" />
+       <Label text="User Name:" GridPane.rowIndex="1" />
+      <Label text="Password:" GridPane.rowIndex="2" />
+      <TextField fx:id="unBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <PasswordField fx:id="pwBox" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <Button fx:id="signInButton" mnemonicParsing="false" onAction="#sayLogin" text="Sign in" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-      <Label fx:id="signIn" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <Button fx:id="signInButton" mnemonicParsing="false" onAction="#handleButtonAction" text="Sign in" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+      <Label fx:id="signIn" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="4" />
    </children>
 </GridPane>
