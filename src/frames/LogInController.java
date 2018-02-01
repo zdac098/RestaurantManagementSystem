@@ -1,62 +1,66 @@
 package frames;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import util.ConnectionUtil;
+import utils.DBConnection;
 
-import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
 
-public class LogInController {
-    @FXML
-    private TextField unBox;
-    @FXML
-    private PasswordField pwBox;
+public class LogInController implements Initializable{
+    @FXML public Button signInButton;
+    @FXML private TextField userBox;
+    @FXML private PasswordField pwBox;
+    private Connection connection = null;
+    private PreparedStatement ps = null;
+    private ResultSet rs = null;
 
-    public Label signIn;
-
-    Stage dialogStage = new Stage();
-    Scene scene;
-
-    Connection connection;
-    PreparedStatement preparedStatement = null;
-    ResultSet rs = null;
-
-    public LogInController() {
-        connection = ConnectionUtil.connectDB();
+    @Override
+    public void initialize(URL url, ResourceBundle resources) {
+        connection = DBConnection.get();
     }
+
     @FXML
-    private void handleButtonAction(javafx.event.ActionEvent event) {
-        String username = unBox.getText().toString();
+    void staffLogin(ActionEvent event) {
+        String username = userBox.getText().toString();
         String password = pwBox.getText().toString();
-        String query = "SELECT * FROM staff WHERE username = ? and password = ?";
+        String query = "SELECT * FROM login_information WHERE username = ? AND password - ?";
         try {
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, username);
-            preparedStatement.setString(2, password);
-            rs = preparedStatement.executeQuery();
-            if(!rs.next()) {
-                signIn.setText("Incorrect username and password!");
-                signIn.setTextFill(Color.RED);
+            ps = connection.prepareStatement(query);
+            ps.setString(1, username);
+            ps.setString(2, password);
+            rs = ps.executeQuery();
+
+            if(rs.next()) {
+                Parent root = FXMLLoader.load(getClass().getResource("StaffMenu.fxml"));
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.setTitle("Staff_Menu");
+                stage.show();
+                ((Node)(event.getSource())).getScene().getWindow().hide();
             } else {
-                Node source =(Node) event.getSource();
-                dialogStage = (Stage) source.getScene().getWindow();
-                dialogStage.close();
-                scene = new Scene(FXMLLoader.load(getClass().getResource("StaffMenu.xml")));
-                dialogStage.setScene(scene);
-                dialogStage.show();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information dialog");
+                alert.setHeaderText(null);
+                alert.setContentText("Incorrect username or password");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+
 }
